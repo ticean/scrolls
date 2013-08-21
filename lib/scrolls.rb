@@ -28,7 +28,7 @@ module Scrolls
       Log.global_context
     end
   end
-  
+
   def add_global_context(data)
     Log.add_global_context(data)
   end
@@ -50,8 +50,8 @@ module Scrolls
   #   at=finish elapsed=0.000
   #   => nil
   #
-  def log(data, &blk)
-    Log.log(data, &blk)
+  def log(message, data={}, &blk)
+    Log.log(message, data, &blk)
   end
 
   # Public: Log an exception

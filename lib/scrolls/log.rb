@@ -62,14 +62,14 @@ module Scrolls
       @tunit ||= default_time_unit
     end
 
-    def log(data, &blk)
+    def log(message=nil, data, &blk)
       if gc = get_global_context
         ctx = gc.merge(context)
         logdata = ctx.merge(data)
       end
 
       unless blk
-        write(logdata)
+        write(message, logdata)
       else
         start = Time.now
         res = nil
@@ -177,12 +177,16 @@ module Scrolls
       s
     end
 
-    def write(data)
+    def write(message=nil, data)
       if log_level_ok?(data[:level])
-        msg = unparse(data)
+        unparsed_data = unparse(data)
         mtx.synchronize do
           begin
-            stream.puts(msg)
+            if message
+              stream.puts("msg=\"#{message}\" #{unparsed_data}")
+            else
+              stream.puts(unparsed_data)
+            end
           rescue NoMethodError => e
             raise
           end
